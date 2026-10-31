@@ -427,7 +427,8 @@
   function appendMsg(text, isUser = false) {
     const div = document.createElement('div');
     div.className = `aura-msg ${isUser ? 'aura-msg-user' : 'aura-msg-bot'}`;
-    div.innerHTML = text;
+    const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    div.innerHTML = formatted;
     msgContainer.appendChild(div);
     msgContainer.scrollTop = msgContainer.scrollHeight;
   }
