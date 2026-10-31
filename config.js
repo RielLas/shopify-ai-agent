@@ -1,0 +1,52 @@
+/**
+ * Shopify AI Shopping Assistant - Configuration
+ * 
+ * Default is configured for Shopify's official Mock Storefront GraphQL API (mock.shop/api)
+ * which supports live product queries and real cartCreate checkout sessions with zero auth required.
+ * 
+ * To switch to a custom private Shopify store:
+ * 1. Set `endpoint` to 'https://YOUR-STORE.myshopify.com/api/2024-01/graphql.json'
+ * 2. Set `storefrontAccessToken` to your store's public Storefront API access token.
+ */
+
+export const CONFIG = {
+  store: {
+    name: "AURA Atelier",
+    tagline: "Curated Contemporary Footwear & Apparel",
+    endpoint: "https://mock.shop/api",
+    storefrontAccessToken: null, // null for mock.shop; add string token for private Shopify stores
+    currency: "USD",
+    apiVersion: "2024-01"
+  },
+  ai: {
+    name: "Aura Concierge",
+    subtitle: "AI Shopping Assistant & Personal Stylist",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+    defaultProvider: "heuristic", // 'heuristic' (zero API key needed) | 'gemini' | 'openai'
+    geminiApiKey: "",
+    openaiApiKey: "",
+    defaultGeminiModel: "gemini-2.0-flash", // Modern Gemini default
+    defaultOpenAIModel: "gpt-4o-mini", // Modern OpenAI default
+    systemPrompt: `You are Aura Concierge, an ultra-refined, helpful AI shopping assistant for AURA Atelier fashion store.
+Your goal is to understand customer style preferences, budget, and sizing, query real products using your tools, and generate frictionless Shopify checkout links.
+Always be concise, stylish, polite, and recommend specific items with reasons.`
+  },
+  starterPrompts: [
+    {
+      label: "👟 Black sneakers under $50",
+      prompt: "Show me black sneakers or slides under $50 with sizes"
+    },
+    {
+      label: "🧥 Winter outerwear & tops",
+      prompt: "What winter tops or jackets do you have in stock?"
+    },
+    {
+      label: "🔥 Top trending styles",
+      prompt: "What are your top recommended apparel picks right now?"
+    },
+    {
+      label: "🛒 Add Slides & checkout",
+      prompt: "Add comfortable slides to my cart and give me the checkout link"
+    }
+  ]
+};

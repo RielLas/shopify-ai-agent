@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA Atelier | Shopify AI Shopping Assistant</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- ================= TOP NAVIGATION ================= -->
+  <header class="sticky top-0 z-30 glass-panel border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Logo & Storefront Status -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
+          A
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold tracking-tight text-sm text-slate-100">AURA ATELIER</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-badge"></span>
+              GraphQL Live
+            </span>
+          </div>
+          <p class="text-[10px] text-slate-400">Shopify Storefront API Integration</p>
+        </div>
+      </div>
+
+      <!-- Quick Search Bar -->
+      <div class="hidden md:flex flex-1 max-w-md mx-6">
+        <div class="relative w-full">
+          <input 
+            type="text" 
+            id="nav-search-input"
+            placeholder="Search footwear, apparel, styles..." 
+            class="w-full bg-slate-900/80 border border-slate-700/60 rounded-xl px-4 py-2 pl-9 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+          />
+          <svg class="w-3.5 h-3.5 absolute left-3 top-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Right Action Tools -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        
+        <!-- Architecture Inspector Toggle -->
+        <button 
+          onclick="window.app.toggleInspector()" 
+          title="Open Real-time Architecture Inspector"
+          class="relative flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700/80 text-slate-200 text-xs font-medium py-1.5 px-3 rounded-xl transition-all hover:border-indigo-500/40"
+        >
+          <span class="text-amber-400">⚡</span>
+          <span class="hidden sm:inline">Inspector</span>
+          <span 
+            id="inspector-counter-badge" 
+            class="hidden ml-1 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/40"
+          >0</span>
+        </button>
+
+        <!-- Settings Modal Toggle -->
+        <button 
+          onclick="document.getElementById('settings-modal').classList.remove('hidden')" 
+          title="Configure API Keys & Store Endpoint"
+          class="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/80 transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </button>
+
+        <!-- Cart Status Pill -->
+        <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 py-1.5 px-3 rounded-xl text-xs font-semibold text-slate-300">
+          <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
+          <span id="cart-counter-badge" class="font-mono text-emerald-400">0</span>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section class="relative overflow-hidden border-b border-slate-800/60 py-12 lg:py-16 bg-gradient-to-b from-indigo-950/20 via-slate-950/40 to-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold mb-4">
+          <span>✨ Autonomous Shopify Clienteling</span>
+          <span class="text-slate-500">•</span>
+          <span>Zero-Latency Tool Calling</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          Curated Modern Style Meets <span class="bg-gradient-to-r from-indigo-400 via-violet-300 to-indigo-200 bg-clip-text text-transparent">Shopify AI Agents.</span>
+        </h1>
+        <p class="text-sm sm:text-base text-slate-400 mt-4 leading-relaxed max-w-2xl">
+          A production-ready reference implementation demonstrating natural language catalog querying, budget-aware product filtering, and instant Shopify <code class="text-indigo-300 font-mono text-xs">cartCreate</code> session generation.
+        </p>
+
+        <!-- Quick Action CTAs -->
+        <div class="mt-6 flex flex-wrap gap-3">
+          <button 
+            onclick="window.app.toggleChat(true)"
+            class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs py-2.5 px-5 rounded-xl transition-all shadow-lg shadow-indigo-600/30 flex items-center gap-2 active:scale-95"
+          >
+            <span>Ask Aura AI Stylist</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+          
+          <button 
+            onclick="window.app.toggleInspector(true)"
+            class="glass-panel hover:bg-slate-800 text-slate-300 font-medium text-xs py-2.5 px-4 rounded-xl transition-all flex items-center gap-2 border border-slate-700/80"
+          >
+            <span class="text-amber-400">⚡</span>
+            <span>View Architecture Inspector</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STOREFRONT SECTION ================= -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+    
+    <!-- Filter Bar -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div>
+        <h2 class="text-lg font-bold text-slate-100">Live Inventory</h2>
+        <p class="text-xs text-slate-400">Connected to Shopify Storefront GraphQL Endpoint</p>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0">
+        <button class="filter-pill" data-category="all" onclick="window.app.applyFilter('all')">All Pieces</button>
+        <button class="filter-pill" data-category="footwear" onclick="window.app.applyFilter('footwear')">Footwear</button>
+        <button class="filter-pill" data-category="tops" onclick="window.app.applyFilter('tops')">Tops & Shirts</button>
+        <button class="filter-pill" data-category="bottoms" onclick="window.app.applyFilter('bottoms')">Bottoms</button>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Dynamically Populated by app.js -->
+    </div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-slate-800/80 py-8 bg-slate-950/80 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        Built with Shopify Storefront API 2024-01 & Autonomous LLM Tool Calling.
+      </div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <a href="https://github.com" target="_blank" class="hover:text-indigo-400 transition-colors">GitHub Repository</a>
+        <span>•</span>
+        <button onclick="window.app.toggleInspector(true)" class="hover:text-indigo-400 transition-colors">GraphQL Tracing</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= FLOATING AI CHAT ASSISTANT DRAWER ================= -->
+  <div 
+    id="ai-chat-drawer" 
+    class="fixed bottom-6 right-6 w-96 max-w-[calc(100vw-3rem)] h-[580px] max-h-[82vh] glass-panel rounded-3xl shadow-2xl flex flex-col z-40 drawer-transition translate-y-full opacity-0 pointer-events-none border border-slate-700/80 overflow-hidden"
+  >
+    <!-- Drawer Header -->
+    <div class="p-4 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <img 
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" 
+            alt="AI Concierge" 
+            class="w-9 h-9 rounded-full object-cover border border-indigo-500/50"
+          />
+          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-900"></span>
+        </div>
+        <div>
+          <h3 class="text-xs font-bold text-slate-100 flex items-center gap-1.5">
+            Aura Concierge
+            <span class="px-1.5 py-0.2 rounded text-[9px] font-semibold bg-indigo-500/20 text-indigo-300">AI Agent</span>
+          </h3>
+          <p class="text-[10px] text-slate-400">Shopify Stylist & Checkout Agent</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1">
+        <button 
+          onclick="document.getElementById('settings-modal').classList.remove('hidden')" 
+          class="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
+          title="AI Settings"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </button>
+        <button 
+          onclick="window.app.toggleChat(false)" 
+          class="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
+          title="Minimize Chat"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3">
+      
+      <!-- Welcome Intro -->
+      <div class="bg-slate-800/80 text-slate-200 border border-slate-700/60 rounded-2xl rounded-bl-xs px-4 py-3 text-xs leading-relaxed">
+        Hello! I'm your AI shopping assistant. I have direct access to our Shopify catalog and can search pieces, compare styles, and initiate instant checkout sessions.
+      </div>
+
+      <!-- Starter Prompts Grid -->
+      <div id="starter-prompts-wrapper" class="space-y-1.5 pt-2">
+        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Quick Suggestions:</p>
+        <div id="chat-starter-prompts" class="grid grid-cols-1 gap-1.5">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Live Tool Execution Indicator -->
+    <div id="ai-status-indicator" class="hidden px-4 py-2 bg-indigo-950/60 border-t border-indigo-900/40 flex items-center gap-2 text-indigo-300 text-[11px] font-mono">
+      <div class="flex gap-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 typing-dot"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 typing-dot"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 typing-dot"></span>
+      </div>
+      <span id="ai-status-text" class="truncate">Executing GraphQL tool call...</span>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="p-3 bg-slate-900/90 border-t border-slate-800 flex items-center gap-2">
+      <input 
+        type="text" 
+        id="ai-input" 
+        placeholder="Ask about style, budget, or checkout..." 
+        class="flex-1 bg-slate-950 border border-slate-700/60 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+      />
+      <button 
+        onclick="window.app.sendChatMessage()" 
+        class="bg-indigo-600 hover:bg-indigo-500 text-white p-2.5 rounded-xl transition-colors shadow-md shadow-indigo-600/30 flex items-center justify-center active:scale-95"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- FLOATING CHAT BUTTON (FAB) -->
+  <button 
+    id="ai-chat-fab" 
+    onclick="window.app.toggleChat(true)"
+    class="fixed bottom-6 right-6 z-40 bg-gradient-to-tr from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white p-4 rounded-full shadow-2xl accent-glow flex items-center gap-2 transition-transform duration-300 active:scale-95 group"
+  >
+    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+    </svg>
+    <span class="text-xs font-bold pr-1">Ask AI Stylist</span>
+  </button>
+
+  <!-- ================= TECHNICAL ARCHITECTURE INSPECTOR DRAWER ================= -->
+  <aside 
+    id="architecture-inspector-drawer" 
+    class="fixed top-0 right-0 h-full w-[460px] max-w-[92vw] glass-panel bg-slate-950/95 z-50 shadow-2xl flex flex-col transition-transform duration-300 translate-x-full border-l border-slate-800"
+  >
+    <!-- Inspector Header -->
+    <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-amber-400 font-bold">⚡</span>
+          <h3 class="text-xs font-bold text-slate-100 tracking-wide uppercase font-mono">Architecture Inspector</h3>
+        </div>
+        <p class="text-[10px] text-slate-400">Live Shopify Storefront GraphQL & Tool Traces</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button 
+          onclick="window.app.inspectorEvents = []; window.app.renderInspector();" 
+          class="text-[10px] text-slate-400 hover:text-slate-200 px-2 py-1 rounded bg-slate-800 border border-slate-700/60"
+        >
+          Clear
+        </button>
+        <button 
+          onclick="window.app.toggleInspector(false)" 
+          class="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Inspector Events Feed -->
+    <div id="inspector-events-list" class="flex-1 overflow-y-auto divide-y divide-slate-800/80">
+      <!-- Populated in real-time -->
+    </div>
+
+    <!-- Architecture Summary Footer -->
+    <div class="p-3 bg-slate-900 border-t border-slate-800 text-[10px] text-slate-400 font-mono flex justify-between items-center">
+      <span>Shopify Storefront API 2024-01</span>
+      <span class="text-emerald-400">100% Client-Side Direct Execution</span>
+    </div>
+  </aside>
+
+  <!-- ================= CHECKOUT SUCCESS MODAL ================= -->
+  <div id="checkout-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="glass-panel max-w-sm w-full p-6 rounded-3xl border border-slate-700/80 shadow-2xl relative" id="checkout-modal-body">
+      <!-- Populated by app.js -->
+    </div>
+  </div>
+
+  <!-- ================= SETTINGS MODAL ================= -->
+  <div id="settings-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="glass-panel max-w-md w-full p-6 rounded-3xl border border-slate-700/80 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div>
+          <h3 class="text-sm font-bold text-slate-100">AI & Storefront Settings</h3>
+          <p class="text-[11px] text-slate-400">Configure LLM Provider & Shopify Endpoint</p>
+        </div>
+        <button onclick="document.getElementById('settings-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="py-4 space-y-4 text-xs">
+        <div>
+          <label class="block font-medium text-slate-300 mb-1">AI Reasoning Engine</label>
+          <select id="settings-provider" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-200 text-xs">
+            <option value="heuristic">Intelligent Heuristic Engine (Default - Instant 0-Key Mode)</option>
+            <option value="gemini">Google Gemini 1.5 Flash (Custom Key)</option>
+            <option value="openai">OpenAI GPT-4o-mini (Custom Key)</option>
+          </select>
+          <p class="text-[10px] text-slate-500 mt-1">Heuristic mode functions with complete tool-calling fidelity without an external API key.</p>
+        </div>
+
+        <div id="settings-key-field">
+          <label class="block font-medium text-slate-300 mb-1">API Key (Optional for Gemini / OpenAI)</label>
+          <input type="password" id="settings-api-key" placeholder="Enter API key..." class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-200 text-xs" />
+        </div>
+
+        <div>
+          <label class="block font-medium text-slate-300 mb-1">Custom Model Name (Optional)</label>
+          <input type="text" id="settings-model-name" placeholder="e.g. gemini-2.0-flash, gpt-4o-mini, gpt-4o..." class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-200 text-xs font-mono" />
+          <p class="text-[10px] text-slate-500 mt-1">Leave empty to use defaults (gemini-2.0-flash / gpt-4o-mini). Fully configurable to any model.</p>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800">
+          <label class="block font-medium text-slate-300 mb-1">Storefront Endpoint</label>
+          <input type="text" id="settings-store-endpoint" value="https://mock.shop/api" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-200 text-xs font-mono" />
+          <p class="text-[10px] text-slate-500 mt-1">Default is Shopify's open mock.shop GraphQL endpoint. You can plug any myshopify.com Storefront API endpoint.</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-3 border-t border-slate-800">
+        <button 
+          onclick="document.getElementById('settings-modal').classList.add('hidden')"
+          class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium"
+        >
+          Cancel
+        </button>
+        <button 
+          onclick="
+            const prov = document.getElementById('settings-provider').value;
+            const key = document.getElementById('settings-api-key').value;
+            const model = document.getElementById('settings-model-name').value.trim();
+            localStorage.setItem('aura_ai_provider', prov);
+            localStorage.setItem('aura_model_name', model);
+            if (prov === 'gemini') localStorage.setItem('aura_gemini_key', key);
+            if (prov === 'openai') localStorage.setItem('aura_openai_key', key);
+            document.getElementById('settings-modal').classList.add('hidden');
+            window.app.showToast('Settings saved successfully!');
+          "
+          class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold"
+        >
+          Save Configuration
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
