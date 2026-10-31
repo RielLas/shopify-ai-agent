@@ -1,13 +1,13 @@
 /**
- * AURA Concierge — Minimalist Shopify Theme Embed Widget
- * Clean, restrained, typography-first shopping assistant
+ * AURA Concierge — Theme-Matched Shopify Embed Widget
+ * Harmonized with the store's clean monochrome palette (White / Black / Inter)
  * Runs natively on any Shopify theme via /products.json & /cart/add.js
  */
 (function() {
   if (window.__AURA_CONCIERGE_LOADED__) return;
   window.__AURA_CONCIERGE_LOADED__ = true;
 
-  // 1. Inject Minimalist Styles
+  // 1. Inject Theme-Matched Styles
   const style = document.createElement('style');
   style.id = 'aura-concierge-styles';
   style.textContent = `
@@ -16,16 +16,16 @@
       bottom: 24px;
       right: 24px;
       z-index: 999999;
-      background: #0f1117;
-      color: #f1f5f9;
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: #000000;
+      color: #ffffff;
+      border: 1px solid #000000;
       border-radius: 9999px;
       padding: 12px 20px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-size: 13px;
       font-weight: 500;
       letter-spacing: -0.01em;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -33,9 +33,10 @@
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     #aura-fab:hover {
-      background: #181b24;
-      border-color: rgba(255, 255, 255, 0.22);
+      background: #262626;
+      border-color: #262626;
       transform: translateY(-1px);
+      box-shadow: 0 14px 28px -5px rgba(0, 0, 0, 0.28);
     }
     #aura-fab .status-dot {
       width: 7px;
@@ -47,21 +48,21 @@
       position: fixed;
       bottom: 84px;
       right: 24px;
-      width: 370px;
+      width: 375px;
       max-width: calc(100vw - 48px);
-      height: 540px;
+      height: 550px;
       max-height: calc(100vh - 110px);
       z-index: 999999;
-      background: #0b0c10;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 18px;
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.18), 0 0 1px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       overflow: hidden;
       opacity: 0;
-      transform: translateY(14px) scale(0.98);
+      transform: translateY(12px) scale(0.98);
       pointer-events: none;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -72,8 +73,8 @@
     }
     .aura-header {
       padding: 16px 20px;
-      background: #0f1117;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      background: #ffffff;
+      border-bottom: 1px solid #f0f0f2;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -86,23 +87,23 @@
     .aura-header-title {
       font-size: 13px;
       font-weight: 600;
-      color: #f8fafc;
+      color: #000000;
       letter-spacing: -0.01em;
       margin: 0;
     }
     .aura-header-badge {
       font-size: 10px;
-      color: #94a3b8;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 2px 7px;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #52525b;
+      background: #f4f4f5;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      border: 1px solid #e4e4e7;
       font-weight: 500;
     }
     .aura-close-btn {
       background: transparent;
       border: none;
-      color: #64748b;
+      color: #71717a;
       cursor: pointer;
       padding: 4px;
       display: flex;
@@ -112,7 +113,7 @@
       transition: color 0.15s;
     }
     .aura-close-btn:hover {
-      color: #cbd5e1;
+      color: #000000;
     }
     .aura-messages {
       flex: 1;
@@ -121,9 +122,10 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+      background: #fafafa;
     }
     .aura-msg {
-      max-width: 88%;
+      max-width: 86%;
       padding: 11px 15px;
       font-size: 13px;
       line-height: 1.5;
@@ -132,43 +134,45 @@
     }
     .aura-msg-bot {
       align-self: flex-start;
-      background: #14171f;
-      color: #cbd5e1;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: #ffffff;
+      color: #18181b;
+      border: 1px solid #e4e4e7;
       border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     }
     .aura-msg-user {
       align-self: flex-end;
-      background: #252b38;
-      color: #f8fafc;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #000000;
+      color: #ffffff;
       border-bottom-right-radius: 4px;
     }
     .aura-product-card {
-      background: #101218;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #ffffff;
+      border: 1px solid #e4e4e7;
       border-radius: 12px;
-      padding: 12px 14px;
+      padding: 14px;
       margin-top: 8px;
       display: flex;
       flex-direction: column;
       gap: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     }
     .aura-product-card .title {
       font-weight: 600;
       font-size: 13px;
-      color: #f1f5f9;
+      color: #000000;
       letter-spacing: -0.01em;
     }
     .aura-product-card .price {
       font-size: 12px;
-      color: #94a3b8;
+      color: #52525b;
+      font-weight: 500;
       font-variant-numeric: tabular-nums;
     }
     .aura-product-card .action-btn {
-      background: #1e2330;
-      color: #f8fafc;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #000000;
+      color: #ffffff;
+      border: 1px solid #000000;
       border-radius: 8px;
       padding: 8px 12px;
       font-size: 12px;
@@ -178,8 +182,8 @@
       transition: all 0.15s;
     }
     .aura-product-card .action-btn:hover {
-      background: #2b3244;
-      border-color: rgba(255, 255, 255, 0.18);
+      background: #262626;
+      border-color: #262626;
     }
     .aura-starters {
       display: flex;
@@ -188,49 +192,50 @@
       margin-top: 4px;
     }
     .aura-starter-btn {
-      background: #12151d;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      color: #94a3b8;
-      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid #e4e4e7;
+      color: #3f3f46;
+      padding: 9px 13px;
       font-size: 12px;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       text-align: left;
       transition: all 0.15s;
       font-weight: 400;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
     }
     .aura-starter-btn:hover {
-      background: #181d27;
-      color: #f1f5f9;
-      border-color: rgba(255, 255, 255, 0.12);
+      background: #f4f4f5;
+      color: #000000;
+      border-color: #d4d4d8;
     }
     .aura-input-box {
-      padding: 12px 16px;
-      background: #0f1117;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 14px 16px;
+      background: #ffffff;
+      border-top: 1px solid #f0f0f2;
       display: flex;
       gap: 8px;
     }
     .aura-input-box input {
       flex: 1;
-      background: #141720;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #ffffff;
+      border: 1px solid #d4d4d8;
       border-radius: 10px;
       padding: 10px 14px;
-      color: #f8fafc;
+      color: #09090b;
       font-size: 13px;
       outline: none;
       transition: border-color 0.15s;
     }
     .aura-input-box input::placeholder {
-      color: #64748b;
+      color: #a1a1aa;
     }
     .aura-input-box input:focus {
-      border-color: rgba(255, 255, 255, 0.22);
+      border-color: #000000;
     }
     .aura-send-btn {
-      background: #f1f5f9;
-      color: #0b0c10;
+      background: #000000;
+      color: #ffffff;
       border: none;
       border-radius: 10px;
       padding: 0 14px;
@@ -243,13 +248,13 @@
       justify-content: center;
     }
     .aura-send-btn:hover {
-      background: #ffffff;
+      background: #262626;
     }
     .aura-checkout-link {
       display: inline-block;
       margin-top: 10px;
-      background: #f8fafc;
-      color: #090a0f;
+      background: #000000;
+      color: #ffffff;
       text-decoration: none;
       padding: 8px 16px;
       border-radius: 8px;
@@ -270,7 +275,7 @@
     .then(data => { catalog = data.products || []; })
     .catch(() => {});
 
-  // 3. Render Minimalist Widget
+  // 3. Render Theme-Matched Widget
   const fab = document.createElement('button');
   fab.id = 'aura-fab';
   fab.innerHTML = `
@@ -295,7 +300,7 @@
     </div>
     <div class="aura-messages" id="aura-msg-container">
       <div class="aura-msg aura-msg-bot">
-        Welcome. I can help you explore the catalog, filter by price, and assemble your order directly.
+        Welcome. I can help you explore our pieces, filter by price, and assemble your order directly.
       </div>
       <div class="aura-starters" id="aura-starters">
         <button class="aura-starter-btn" data-q="Show pieces under Rs. 2000">Pieces under Rs. 2,000</button>
