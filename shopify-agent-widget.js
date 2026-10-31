@@ -1,6 +1,6 @@
 /**
  * AURA Concierge — Autonomous AI Shopping Stylist
- * Powered by Gemini 1.5/2.0 Flash + Intelligent Editorial Fashion Persona
+ * Powered by Google AI Studio Gemini 3.8 Flash / Gemini 4 Argon + Intelligent Editorial Fashion Persona
  * Seamless Shopify Storefront Integration (/products.json & /cart/add.js)
  */
 (function() {
@@ -373,14 +373,23 @@
     <!-- In-Widget LLM Settings Modal -->
     <div class="aura-settings-modal" id="aura-settings-modal">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h4 style="margin:0; font-size:14px; font-weight:600;">AI Engine Settings</h4>
+        <h4 style="margin:0; font-size:14px; font-weight:600;">AI Studio Engine Settings</h4>
         <button class="aura-icon-btn" id="aura-close-settings">✕</button>
       </div>
       <p style="font-size:11px; color:#71717a; margin:0; line-height:1.4;">
-        Connect Google Gemini 1.5/2.0 Flash or OpenAI for real-time generative responses. Leave blank to use the built-in editorial stylist engine.
+        Connect Google AI Studio (Gemini 3.8 Flash / Gemini 4 Argon) for real-time generative reasoning. Leave blank for built-in stylist engine.
       </p>
       <div>
-        <label style="font-size:11px; font-weight:600; color:#27272a; display:block; margin-bottom:4px;">Gemini API Key</label>
+        <label style="font-size:11px; font-weight:600; color:#27272a; display:block; margin-bottom:4px;">Gemini Model</label>
+        <select id="aura-gemini-model" style="width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid #d4d4d8; border-radius:6px; font-size:12px; background:#fff; color:#000;">
+          <option value="gemini-3.8-flash">Gemini 3.8 Flash (High-Speed Workhorse)</option>
+          <option value="gemini-4-argon">Gemini 4 Argon (Flagship Reasoning)</option>
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (Low Latency)</option>
+          <option value="gemini-flash-latest">gemini-flash-latest (Auto-update)</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px; font-weight:600; color:#27272a; display:block; margin-bottom:4px;">Google AI Studio API Key</label>
         <input type="password" id="aura-gemini-key" placeholder="AIzaSy..." style="width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid #d4d4d8; border-radius:6px; font-size:12px;" />
       </div>
       <button id="aura-save-settings" style="background:#000; color:#fff; border:none; padding:10px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">
@@ -399,14 +408,18 @@
   const settingsModal = document.getElementById('aura-settings-modal');
   document.getElementById('aura-settings-btn').onclick = () => {
     document.getElementById('aura-gemini-key').value = localStorage.getItem('aura_gemini_key') || '';
+    document.getElementById('aura-gemini-model').value = localStorage.getItem('aura_gemini_model') || 'gemini-3.8-flash';
     settingsModal.classList.add('show');
   };
   document.getElementById('aura-close-settings').onclick = () => settingsModal.classList.remove('show');
   document.getElementById('aura-save-settings').onclick = () => {
     const key = document.getElementById('aura-gemini-key').value.trim();
+    const model = document.getElementById('aura-gemini-model').value;
+    localStorage.setItem('aura_gemini_model', model);
     if (key) {
       localStorage.setItem('aura_gemini_key', key);
-      document.getElementById('aura-model-badge').textContent = 'Gemini 1.5 Flash';
+      const modelLabel = model === 'gemini-4-argon' ? 'Gemini 4 Argon' : 'Gemini 3.8 Flash';
+      document.getElementById('aura-model-badge').textContent = modelLabel;
     } else {
       localStorage.removeItem('aura_gemini_key');
       document.getElementById('aura-model-badge').textContent = 'Stylist AI';
@@ -416,7 +429,8 @@
   };
 
   if (localStorage.getItem('aura_gemini_key')) {
-    document.getElementById('aura-model-badge').textContent = 'Gemini 1.5 Flash';
+    const savedModel = localStorage.getItem('aura_gemini_model') || 'gemini-3.8-flash';
+    document.getElementById('aura-model-badge').textContent = savedModel === 'gemini-4-argon' ? 'Gemini 4 Argon' : 'Gemini 3.8 Flash';
   }
 
   const msgContainer = document.getElementById('aura-msg-container');
@@ -486,7 +500,8 @@ Keep answers concise (2-4 sentences max).`;
           { role: 'user', parts: [{ text: q }] }
         ];
 
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+        const selectedModel = localStorage.getItem('aura_gemini_model') || 'gemini-3.8-flash';
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${geminiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
