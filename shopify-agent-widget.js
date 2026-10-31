@@ -90,15 +90,6 @@
       letter-spacing: -0.01em;
       margin: 0;
     }
-    .aura-header-badge {
-      font-size: 10px;
-      color: #52525b;
-      background: #f4f4f5;
-      padding: 2px 7px;
-      border-radius: 9999px;
-      border: 1px solid #e4e4e7;
-      font-weight: 500;
-    }
     .aura-header-actions {
       display: flex;
       align-items: center;
@@ -333,7 +324,6 @@
     <div class="aura-header">
       <div class="aura-header-info">
         <h3 class="aura-header-title">Concierge</h3>
-        <span class="aura-header-badge" id="aura-model-badge">Stylist AI</span>
       </div>
       <div class="aura-header-actions">
         <button class="aura-icon-btn" id="aura-settings-btn" title="AI Settings">
@@ -417,20 +407,12 @@
     localStorage.setItem('aura_gemini_model', model);
     if (key) {
       localStorage.setItem('aura_gemini_key', key);
-      const modelLabel = model === 'gemini-3.1-flash-lite' ? 'Gemini 3.1 Flash-Lite' : 'Gemini 3.5 Flash-Lite';
-      document.getElementById('aura-model-badge').textContent = modelLabel;
     } else {
       localStorage.removeItem('aura_gemini_key');
-      document.getElementById('aura-model-badge').textContent = 'Stylist AI';
     }
     settingsModal.classList.remove('show');
     appendMsg('Engine preferences updated.');
   };
-
-  if (localStorage.getItem('aura_gemini_key')) {
-    const savedModel = localStorage.getItem('aura_gemini_model') || 'gemini-3.5-flash-lite';
-    document.getElementById('aura-model-badge').textContent = savedModel === 'gemini-3.1-flash-lite' ? 'Gemini 3.1 Flash-Lite' : 'Gemini 3.5 Flash-Lite';
-  }
 
   const msgContainer = document.getElementById('aura-msg-container');
   const input = document.getElementById('aura-user-input');
