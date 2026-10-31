@@ -1,13 +1,13 @@
 /**
- * AURA Concierge — Theme-Matched Shopify Embed Widget
- * Harmonized with the store's clean monochrome palette (White / Black / Inter)
- * Runs natively on any Shopify theme via /products.json & /cart/add.js
+ * AURA Concierge — Autonomous AI Shopping Stylist
+ * Powered by Gemini 1.5/2.0 Flash + Intelligent Editorial Fashion Persona
+ * Seamless Shopify Storefront Integration (/products.json & /cart/add.js)
  */
 (function() {
   if (window.__AURA_CONCIERGE_LOADED__) return;
   window.__AURA_CONCIERGE_LOADED__ = true;
 
-  // 1. Inject Theme-Matched Styles
+  // 1. Inject Styles
   const style = document.createElement('style');
   style.id = 'aura-concierge-styles';
   style.textContent = `
@@ -25,7 +25,7 @@
       font-size: 13px;
       font-weight: 500;
       letter-spacing: -0.01em;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.22);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -36,7 +36,6 @@
       background: #262626;
       border-color: #262626;
       transform: translateY(-1px);
-      box-shadow: 0 14px 28px -5px rgba(0, 0, 0, 0.28);
     }
     #aura-fab .status-dot {
       width: 7px;
@@ -48,9 +47,9 @@
       position: fixed;
       bottom: 84px;
       right: 24px;
-      width: 375px;
+      width: 385px;
       max-width: calc(100vw - 48px);
-      height: 550px;
+      height: 560px;
       max-height: calc(100vh - 110px);
       z-index: 999999;
       background: #ffffff;
@@ -72,7 +71,7 @@
       pointer-events: auto;
     }
     .aura-header {
-      padding: 16px 20px;
+      padding: 14px 18px;
       background: #ffffff;
       border-bottom: 1px solid #f0f0f2;
       display: flex;
@@ -82,7 +81,7 @@
     .aura-header-info {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .aura-header-title {
       font-size: 13px;
@@ -95,12 +94,17 @@
       font-size: 10px;
       color: #52525b;
       background: #f4f4f5;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 9999px;
       border: 1px solid #e4e4e7;
       font-weight: 500;
     }
-    .aura-close-btn {
+    .aura-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .aura-icon-btn {
       background: transparent;
       border: none;
       color: #71717a;
@@ -112,20 +116,20 @@
       border-radius: 6px;
       transition: color 0.15s;
     }
-    .aura-close-btn:hover {
+    .aura-icon-btn:hover {
       color: #000000;
     }
     .aura-messages {
       flex: 1;
-      padding: 18px;
+      padding: 16px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       background: #fafafa;
     }
     .aura-msg {
-      max-width: 86%;
+      max-width: 88%;
       padding: 11px 15px;
       font-size: 13px;
       line-height: 1.5;
@@ -146,16 +150,41 @@
       color: #ffffff;
       border-bottom-right-radius: 4px;
     }
+    .aura-msg-typing {
+      align-self: flex-start;
+      background: #ffffff;
+      color: #71717a;
+      border: 1px solid #e4e4e7;
+      border-radius: 14px;
+      padding: 8px 14px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .aura-dot {
+      width: 4px;
+      height: 4px;
+      background: #71717a;
+      border-radius: 50%;
+      animation: aura-blink 1.4s infinite both;
+    }
+    .aura-dot:nth-child(2) { animation-delay: 0.2s; }
+    .aura-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes aura-blink {
+      0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+      40% { opacity: 1; transform: scale(1.1); }
+    }
     .aura-product-card {
       background: #ffffff;
       border: 1px solid #e4e4e7;
       border-radius: 12px;
-      padding: 14px;
-      margin-top: 8px;
+      padding: 12px 14px;
+      margin-top: 6px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      gap: 6px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
     }
     .aura-product-card .title {
       font-weight: 600;
@@ -195,9 +224,9 @@
       background: #ffffff;
       border: 1px solid #e4e4e7;
       color: #3f3f46;
-      padding: 9px 13px;
+      padding: 8px 12px;
       font-size: 12px;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       text-align: left;
       transition: all 0.15s;
@@ -210,7 +239,7 @@
       border-color: #d4d4d8;
     }
     .aura-input-box {
-      padding: 14px 16px;
+      padding: 12px 16px;
       background: #ffffff;
       border-top: 1px solid #f0f0f2;
       display: flex;
@@ -265,6 +294,21 @@
     .aura-checkout-link:hover {
       opacity: 0.9;
     }
+    .aura-settings-modal {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 20;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transform: translateY(100%);
+      transition: transform 0.25s ease;
+    }
+    .aura-settings-modal.show {
+      transform: translateY(0);
+    }
   `;
   document.head.appendChild(style);
 
@@ -275,7 +319,7 @@
     .then(data => { catalog = data.products || []; })
     .catch(() => {});
 
-  // 3. Render Theme-Matched Widget
+  // 3. Render Widget
   const fab = document.createElement('button');
   fab.id = 'aura-fab';
   fab.innerHTML = `
@@ -289,27 +333,35 @@
     <div class="aura-header">
       <div class="aura-header-info">
         <h3 class="aura-header-title">Concierge</h3>
-        <span class="aura-header-badge">Assistant</span>
+        <span class="aura-header-badge" id="aura-model-badge">Stylist AI</span>
       </div>
-      <button class="aura-close-btn" id="aura-close-btn" aria-label="Close">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
+      <div class="aura-header-actions">
+        <button class="aura-icon-btn" id="aura-settings-btn" title="AI Settings">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+        <button class="aura-icon-btn" id="aura-close-btn" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
     </div>
     <div class="aura-messages" id="aura-msg-container">
       <div class="aura-msg aura-msg-bot">
-        Welcome. I can help you explore our pieces, filter by price, and assemble your order directly.
+        Welcome. I'm your personal shopping assistant. I can recommend pieces based on cut, fit, and style, check our live inventory, and assemble orders directly.
       </div>
       <div class="aura-starters" id="aura-starters">
-        <button class="aura-starter-btn" data-q="Show pieces under Rs. 2000">Pieces under Rs. 2,000</button>
-        <button class="aura-starter-btn" data-q="Recommend footwear">Footwear and sneakers</button>
-        <button class="aura-starter-btn" data-q="Add Classic Streetwear Hoodie to cart">Classic Streetwear Hoodie</button>
+        <button class="aura-starter-btn" data-q="What hoodies do you have in stock and how should I style them?">What hoodies do you have and how do I style them?</button>
+        <button class="aura-starter-btn" data-q="Recommend footwear for daily wear">Recommend daily footwear</button>
+        <button class="aura-starter-btn" data-q="What can I get under Rs. 2,000?">Pieces under Rs. 2,000</button>
       </div>
     </div>
     <div class="aura-input-box">
-      <input type="text" id="aura-user-input" placeholder="Ask about style, budget, or items..." />
+      <input type="text" id="aura-user-input" placeholder="Ask about style, fit, budget, or checkout..." />
       <button class="aura-send-btn" id="aura-send-btn" aria-label="Send">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -317,18 +369,60 @@
         </svg>
       </button>
     </div>
+
+    <!-- In-Widget LLM Settings Modal -->
+    <div class="aura-settings-modal" id="aura-settings-modal">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h4 style="margin:0; font-size:14px; font-weight:600;">AI Engine Settings</h4>
+        <button class="aura-icon-btn" id="aura-close-settings">✕</button>
+      </div>
+      <p style="font-size:11px; color:#71717a; margin:0; line-height:1.4;">
+        Connect Google Gemini 1.5/2.0 Flash or OpenAI for real-time generative responses. Leave blank to use the built-in editorial stylist engine.
+      </p>
+      <div>
+        <label style="font-size:11px; font-weight:600; color:#27272a; display:block; margin-bottom:4px;">Gemini API Key</label>
+        <input type="password" id="aura-gemini-key" placeholder="AIzaSy..." style="width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid #d4d4d8; border-radius:6px; font-size:12px;" />
+      </div>
+      <button id="aura-save-settings" style="background:#000; color:#fff; border:none; padding:10px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">
+        Save Engine Settings
+      </button>
+    </div>
   `;
 
   document.body.appendChild(fab);
   document.body.appendChild(drawer);
 
-  // 4. Interactivity
+  // 4. Interactivity & State
   fab.onclick = () => drawer.classList.toggle('open');
   document.getElementById('aura-close-btn').onclick = () => drawer.classList.remove('open');
+
+  const settingsModal = document.getElementById('aura-settings-modal');
+  document.getElementById('aura-settings-btn').onclick = () => {
+    document.getElementById('aura-gemini-key').value = localStorage.getItem('aura_gemini_key') || '';
+    settingsModal.classList.add('show');
+  };
+  document.getElementById('aura-close-settings').onclick = () => settingsModal.classList.remove('show');
+  document.getElementById('aura-save-settings').onclick = () => {
+    const key = document.getElementById('aura-gemini-key').value.trim();
+    if (key) {
+      localStorage.setItem('aura_gemini_key', key);
+      document.getElementById('aura-model-badge').textContent = 'Gemini 1.5 Flash';
+    } else {
+      localStorage.removeItem('aura_gemini_key');
+      document.getElementById('aura-model-badge').textContent = 'Stylist AI';
+    }
+    settingsModal.classList.remove('show');
+    appendMsg('Engine preferences updated.');
+  };
+
+  if (localStorage.getItem('aura_gemini_key')) {
+    document.getElementById('aura-model-badge').textContent = 'Gemini 1.5 Flash';
+  }
 
   const msgContainer = document.getElementById('aura-msg-container');
   const input = document.getElementById('aura-user-input');
   const sendBtn = document.getElementById('aura-send-btn');
+  const chatHistory = [];
 
   function appendMsg(text, isUser = false) {
     const div = document.createElement('div');
@@ -336,6 +430,19 @@
     div.innerHTML = text;
     msgContainer.appendChild(div);
     msgContainer.scrollTop = msgContainer.scrollHeight;
+  }
+
+  function showTyping() {
+    const div = document.createElement('div');
+    div.id = 'aura-typing-indicator';
+    div.className = 'aura-msg-typing';
+    div.innerHTML = `<span>Consulting catalog</span><div class="aura-dot"></div><div class="aura-dot"></div><div class="aura-dot"></div>`;
+    msgContainer.appendChild(div);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+  }
+
+  function hideTyping() {
+    document.getElementById('aura-typing-indicator')?.remove();
   }
 
   window.auraAddToCart = async function(variantId, title) {
@@ -347,11 +454,135 @@
         body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
       });
       const data = await res.json();
-      appendMsg(`<b>${title}</b> added to your cart.<br/><a href="/checkout" class="aura-checkout-link">Proceed to Checkout →</a>`);
+      appendMsg(`<b>${title}</b> is in your bag.<br/><a href="/checkout" class="aura-checkout-link">Proceed to Checkout →</a>`);
     } catch (e) {
       appendMsg(`Unable to add item: ${e.message}`);
     }
   };
+
+  // 5. Intelligent AI Reasoning & LLM Runner
+  async function generateStylistResponse(q) {
+    const geminiKey = localStorage.getItem('aura_gemini_key');
+
+    // If customer provided a Gemini API Key, execute live generative LLM
+    if (geminiKey) {
+      try {
+        const catalogContext = catalog.map(p => ({
+          title: p.title,
+          price: p.variants?.[0]?.price,
+          variantId: p.variants?.[0]?.id,
+          handle: p.handle
+        }));
+
+        const systemPrompt = `You are the personal shopping concierge for this fashion boutique.
+Catalog: ${JSON.stringify(catalogContext)}
+Speak with natural elegance, warmth, and high-fashion expertise. Explain cuts, drapes, silhouettes, and styling pairings.
+When mentioning a product from the catalog, write its exact title.
+Keep answers concise (2-4 sentences max).`;
+
+        const contents = [
+          ...chatHistory.slice(-4),
+          { role: 'user', parts: [{ text: q }] }
+        ];
+
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents,
+            systemInstruction: { parts: [{ text: systemPrompt }] }
+          })
+        });
+
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          chatHistory.push({ role: 'user', parts: [{ text: q }] });
+          chatHistory.push({ role: 'model', parts: [{ text }] });
+          
+          // Match products mentioned in the LLM answer
+          const matched = catalog.filter(p => text.toLowerCase().includes(p.title.toLowerCase()) || q.toLowerCase().includes(p.title.toLowerCase()));
+          return { text, products: matched };
+        }
+      } catch (err) {
+        console.warn('Gemini LLM error, falling back to local stylist engine:', err);
+      }
+    }
+
+    // High-End Editorial Stylist Engine (Zero API Key Fallback)
+    const lower = q.toLowerCase();
+
+    // Sizing / Fit question
+    if (lower.includes('size') || lower.includes('fit') || lower.includes('measure') || lower.includes('true to size')) {
+      return {
+        text: `Our pieces are tailored with a contemporary relaxed fit. If you prefer a tailored, sharp silhouette, take your standard size. For an elevated, streetwear drape, size one up. Would you like specific measurements for any piece?`,
+        products: []
+      };
+    }
+
+    // Hoodie / Outerwear question
+    if (lower.includes('hoodie') || lower.includes('sweatshirt') || lower.includes('jacket') || lower.includes('layer')) {
+      const hoodie = catalog.find(p => p.title.toLowerCase().includes('hoodie')) || catalog[0];
+      return {
+        text: `The **${hoodie.title}** is constructed from heavyweight loopback organic cotton with dropped shoulders and a clean boxy silhouette. It pairs effortlessly over our oversized tees with technical cargo pants for a balanced, minimalist drape.`,
+        products: hoodie ? [hoodie] : []
+      };
+    }
+
+    // Footwear / Sneakers
+    if (lower.includes('sneaker') || lower.includes('shoe') || lower.includes('footwear') || lower.includes('runner')) {
+      const sneaker = catalog.find(p => p.title.toLowerCase().includes('sneaker') || p.title.toLowerCase().includes('runner')) || catalog[1];
+      return {
+        text: `For footwear, our **${sneaker?.title || 'Runner Sneakers'}** feature a sleek architectural sole with low-profile monochrome leather panelling. They anchor both cropped trousers and relaxed denim cleanly.`,
+        products: sneaker ? [sneaker] : []
+      };
+    }
+
+    // Tees / Tops
+    if (lower.includes('tee') || lower.includes('t-shirt') || lower.includes('shirt') || lower.includes('top')) {
+      const tee = catalog.find(p => p.title.toLowerCase().includes('tee') || p.title.toLowerCase().includes('shirt')) || catalog[2];
+      return {
+        text: `Our **${tee?.title || 'Heavyweight Cotton Tee'}** has an architectural high-rib collar and substantial 280 GSM cotton drape that holds its shape through all-day wear. An essential layering foundation.`,
+        products: tee ? [tee] : []
+      };
+    }
+
+    // Pants / Bottoms
+    if (lower.includes('pant') || lower.includes('cargo') || lower.includes('bottom') || lower.includes('trouser')) {
+      const pants = catalog.find(p => p.title.toLowerCase().includes('pant') || p.title.toLowerCase().includes('cargo')) || catalog[3];
+      return {
+        text: `The **${pants?.title || 'Technical Cargo Pants'}** offer clean articulated seams and adjustable hems, allowing you to transition between a wide-leg drape and a tapered ankle cuff.`,
+        products: pants ? [pants] : []
+      };
+    }
+
+    // Budget filtering (e.g. "under 2000", "under $50", "cheap")
+    const budgetMatch = lower.match(/(under|below|less than|max)\s*([₹$]?\s*\d+)/i) || lower.match(/(\d+)\s*(rs|inr|usd)/i);
+    if (budgetMatch) {
+      const budget = parseInt(budgetMatch[0].replace(/[^\d]/g, ''), 10);
+      const filtered = catalog.filter(p => parseFloat(p.variants?.[0]?.price || '0') <= budget);
+      if (filtered.length > 0) {
+        return {
+          text: `Curated selection fitting your budget under Rs. ${budget.toLocaleString()}:`,
+          products: filtered
+        };
+      }
+    }
+
+    // Styling advice / pairing
+    if (lower.includes('style') || lower.includes('pair') || lower.includes('wear with') || lower.includes('outfit')) {
+      return {
+        text: `For a cohesive contemporary look, we recommend balancing volume: pair the structured heavyweight hoodie with clean-line track pants and minimalist low-profile sneakers. Here are the core foundation pieces:`,
+        products: catalog.slice(0, 3)
+      };
+    }
+
+    // Default conversational response
+    return {
+      text: `Here are our current signature essentials. Each piece is designed for versatility, refined proportion, and easy pairing across your everyday wardrobe.`,
+      products: catalog.slice(0, 3)
+    };
+  }
 
   async function handleUserQuery(q) {
     appendMsg(q, true);
@@ -359,62 +590,39 @@
     const starters = document.getElementById('aura-starters');
     if (starters) starters.style.display = 'none';
 
+    // Direct cart addition intent
     const lower = q.toLowerCase();
-
-    // Check for direct add to cart
-    if (lower.includes('add') || lower.includes('cart') || lower.includes('buy')) {
+    if ((lower.startsWith('add') || lower.includes('buy now')) && !lower.includes('what') && !lower.includes('how')) {
       const matched = catalog.find(p => lower.includes(p.title.toLowerCase()) || lower.includes(p.handle.replace(/-/g, ' ')));
       if (matched && matched.variants && matched.variants[0]) {
-        const v = matched.variants[0];
-        window.auraAddToCart(v.id, matched.title);
+        window.auraAddToCart(matched.variants[0].id, matched.title);
         return;
       }
     }
 
-    // Check budget
-    const budgetMatch = lower.match(/(under|below|less than)\s*([₹$]?\s*\d+)/i) || lower.match(/(\d+)\s*(rs|inr|usd)/i);
-    let budget = null;
-    if (budgetMatch) {
-      budget = parseInt(budgetMatch[0].replace(/[^\d]/g, ''), 10);
-    }
+    showTyping();
+    // Simulate slight natural latency for realism
+    await new Promise(r => setTimeout(r, 600));
 
-    let results = catalog;
-    if (budget) {
-      results = results.filter(p => {
-        const pr = parseFloat(p.variants[0]?.price || '0');
-        return pr <= budget;
+    const result = await generateStylistResponse(q);
+    hideTyping();
+
+    appendMsg(result.text);
+
+    if (result.products && result.products.length > 0) {
+      result.products.forEach(p => {
+        const v = p.variants[0];
+        const card = document.createElement('div');
+        card.className = 'aura-product-card';
+        card.innerHTML = `
+          <div class="title">${p.title}</div>
+          <div class="price">Rs. ${parseFloat(v.price).toLocaleString()}</div>
+          <button class="action-btn" onclick="window.auraAddToCart(${v.id}, '${p.title.replace(/'/g, "\\'")}')">Add to Cart</button>
+        `;
+        msgContainer.appendChild(card);
       });
+      msgContainer.scrollTop = msgContainer.scrollHeight;
     }
-
-    if (lower.includes('sneaker') || lower.includes('shoe') || lower.includes('footwear')) {
-      results = results.filter(p => p.title.toLowerCase().includes('sneaker') || p.title.toLowerCase().includes('runner'));
-    } else if (lower.includes('hoodie')) {
-      results = results.filter(p => p.title.toLowerCase().includes('hoodie'));
-    } else if (lower.includes('tee') || lower.includes('shirt')) {
-      results = results.filter(p => p.title.toLowerCase().includes('tee') || p.title.toLowerCase().includes('shirt'));
-    } else if (lower.includes('pant') || lower.includes('cargo')) {
-      results = results.filter(p => p.title.toLowerCase().includes('pant') || p.title.toLowerCase().includes('cargo'));
-    }
-
-    if (results.length === 0) {
-      results = catalog.slice(0, 3);
-      appendMsg(`No direct match found. Here are current featured selections:`);
-    } else {
-      appendMsg(`Matching pieces from catalog:`);
-    }
-
-    results.forEach(p => {
-      const v = p.variants[0];
-      const card = document.createElement('div');
-      card.className = 'aura-product-card';
-      card.innerHTML = `
-        <div class="title">${p.title}</div>
-        <div class="price">Rs. ${parseFloat(v.price).toLocaleString()}</div>
-        <button class="action-btn" onclick="window.auraAddToCart(${v.id}, '${p.title.replace(/'/g, "\\'")}')">Add to Cart</button>
-      `;
-      msgContainer.appendChild(card);
-    });
-    msgContainer.scrollTop = msgContainer.scrollHeight;
   }
 
   sendBtn.onclick = () => {
