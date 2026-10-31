@@ -228,8 +228,9 @@ export class ShoppingAgent {
    * Gemini API Function Calling integration (for live key evaluation)
    */
   async callGeminiAgent(userMessage) {
-    const model = this.customModel || CONFIG.ai.defaultGeminiModel;
-    this.notifyStatus(`🤖 Contacting Google Gemini (${model})...`);
+    const primaryModel = this.customModel || CONFIG.ai.defaultGeminiModel || 'gemini-3.5-flash-lite';
+    const fallbackModel = CONFIG.ai.fallbackGeminiModel || 'gemini-3.1-flash-lite';
+    this.notifyStatus(`🤖 Contacting Google Gemini (${primaryModel})...`);
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.geminiKey}`;
 
     const toolsDef = [{

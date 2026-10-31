@@ -1,6 +1,6 @@
 /**
  * AURA Concierge — Autonomous AI Shopping Stylist
- * Powered by Google AI Studio Gemini 3.8 Flash / Gemini 4 Argon + Intelligent Editorial Fashion Persona
+ * Powered by Google AI Studio Gemini 3.5 Flash-Lite (Fallback: Gemini 3.1 Flash-Lite)
  * Seamless Shopify Storefront Integration (/products.json & /cart/add.js)
  */
 (function() {
@@ -377,14 +377,13 @@
         <button class="aura-icon-btn" id="aura-close-settings">✕</button>
       </div>
       <p style="font-size:11px; color:#71717a; margin:0; line-height:1.4;">
-        Connect Google AI Studio (Gemini 3.8 Flash / Gemini 4 Argon) for real-time generative reasoning. Leave blank for built-in stylist engine.
+        Connect Google AI Studio (Gemini 3.5 Flash-Lite with 3.1 Flash-Lite fallback). Real-time generative styling on your Shopify catalog.
       </p>
       <div>
         <label style="font-size:11px; font-weight:600; color:#27272a; display:block; margin-bottom:4px;">Gemini Model</label>
         <select id="aura-gemini-model" style="width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid #d4d4d8; border-radius:6px; font-size:12px; background:#fff; color:#000;">
-          <option value="gemini-3.8-flash">Gemini 3.8 Flash (High-Speed Workhorse)</option>
-          <option value="gemini-4-argon">Gemini 4 Argon (Flagship Reasoning)</option>
-          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (Low Latency)</option>
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (Recommended / Ultra-Fast)</option>
+          <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite (High Efficiency)</option>
           <option value="gemini-flash-latest">gemini-flash-latest (Auto-update)</option>
         </select>
       </div>
@@ -408,17 +407,17 @@
   const settingsModal = document.getElementById('aura-settings-modal');
   document.getElementById('aura-settings-btn').onclick = () => {
     document.getElementById('aura-gemini-key').value = localStorage.getItem('aura_gemini_key') || '';
-    document.getElementById('aura-gemini-model').value = localStorage.getItem('aura_gemini_model') || 'gemini-3.8-flash';
+    document.getElementById('aura-gemini-model').value = localStorage.getItem('aura_gemini_model') || 'gemini-3.5-flash-lite';
     settingsModal.classList.add('show');
   };
   document.getElementById('aura-close-settings').onclick = () => settingsModal.classList.remove('show');
   document.getElementById('aura-save-settings').onclick = () => {
     const key = document.getElementById('aura-gemini-key').value.trim();
-    const model = document.getElementById('aura-gemini-model').value;
+    const model = document.getElementById('aura-gemini-model').value || 'gemini-3.5-flash-lite';
     localStorage.setItem('aura_gemini_model', model);
     if (key) {
       localStorage.setItem('aura_gemini_key', key);
-      const modelLabel = model === 'gemini-4-argon' ? 'Gemini 4 Argon' : 'Gemini 3.8 Flash';
+      const modelLabel = model === 'gemini-3.1-flash-lite' ? 'Gemini 3.1 Flash-Lite' : 'Gemini 3.5 Flash-Lite';
       document.getElementById('aura-model-badge').textContent = modelLabel;
     } else {
       localStorage.removeItem('aura_gemini_key');
@@ -429,8 +428,8 @@
   };
 
   if (localStorage.getItem('aura_gemini_key')) {
-    const savedModel = localStorage.getItem('aura_gemini_model') || 'gemini-3.8-flash';
-    document.getElementById('aura-model-badge').textContent = savedModel === 'gemini-4-argon' ? 'Gemini 4 Argon' : 'Gemini 3.8 Flash';
+    const savedModel = localStorage.getItem('aura_gemini_model') || 'gemini-3.5-flash-lite';
+    document.getElementById('aura-model-badge').textContent = savedModel === 'gemini-3.1-flash-lite' ? 'Gemini 3.1 Flash-Lite' : 'Gemini 3.5 Flash-Lite';
   }
 
   const msgContainer = document.getElementById('aura-msg-container');
@@ -500,15 +499,25 @@ Keep answers concise (2-4 sentences max).`;
           { role: 'user', parts: [{ text: q }] }
         ];
 
-        const selectedModel = localStorage.getItem('aura_gemini_model') || 'gemini-3.8-flash';
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${geminiKey}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents,
-            systemInstruction: { parts: [{ text: systemPrompt }] }
-          })
-        });
+        const primaryModel = localStorage.getItem('aura_gemini_model') || 'gemini-3.5-flash-lite';
+        const fallbackModel = 'gemini-3.1-flash-lite';
+
+        async function queryGemini(modelName) {
+          return await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents,
+              systemInstruction: { parts: [{ text: systemPrompt }] }
+            })
+          });
+        }
+
+        let res = await queryGemini(primaryModel);
+        if (!res.ok && primaryModel !== fallbackModel) {
+          console.warn(`Gemini (${primaryModel}) failed with status ${res.status}. Falling back to ${fallbackModel}...`);
+          res = await queryGemini(fallbackModel);
+        }
 
         const data = await res.json();
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text;

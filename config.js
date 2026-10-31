@@ -25,7 +25,8 @@ export const CONFIG = {
     defaultProvider: "heuristic", // 'heuristic' (zero API key needed) | 'gemini' | 'openai'
     geminiApiKey: "",
     openaiApiKey: "",
-    defaultGeminiModel: "gemini-3.8-flash", // Official Google AI Studio standard
+    defaultGeminiModel: "gemini-3.5-flash-lite", // 2026 Google AI Studio flash-lite standard
+    fallbackGeminiModel: "gemini-3.1-flash-lite",
     defaultOpenAIModel: "gpt-5-mini",
     systemPrompt: `You are Aura Concierge, an ultra-refined, helpful AI shopping assistant for AURA Atelier fashion store.
 Your goal is to understand customer style preferences, budget, and sizing, query real products using your tools, and generate frictionless Shopify checkout links.
