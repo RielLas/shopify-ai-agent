@@ -74,7 +74,7 @@
           title="Open Real-time Architecture Inspector"
           class="relative flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700/80 text-slate-200 text-xs font-medium py-1.5 px-3 rounded-xl transition-all hover:border-indigo-500/40"
         >
-          <span class="text-amber-400">⚡</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
           <span class="hidden sm:inline">Inspector</span>
           <span 
             id="inspector-counter-badge" 
@@ -111,7 +111,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="max-w-3xl">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold mb-4">
-          <span>✨ Autonomous Shopify Clienteling</span>
+          <span>Autonomous Clienteling</span>
           <span class="text-slate-500">•</span>
           <span>Zero-Latency Tool Calling</span>
         </div>
@@ -128,7 +128,7 @@
             onclick="window.app.toggleChat(true)"
             class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs py-2.5 px-5 rounded-xl transition-all shadow-lg shadow-indigo-600/30 flex items-center gap-2 active:scale-95"
           >
-            <span>Ask Aura AI Stylist</span>
+            <span>Ask Aura Concierge</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
           
@@ -136,7 +136,7 @@
             onclick="window.app.toggleInspector(true)"
             class="glass-panel hover:bg-slate-800 text-slate-300 font-medium text-xs py-2.5 px-4 rounded-xl transition-all flex items-center gap-2 border border-slate-700/80"
           >
-            <span class="text-amber-400">⚡</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
             <span>View Architecture Inspector</span>
           </button>
         </div>
@@ -275,12 +275,10 @@
   <button 
     id="ai-chat-fab" 
     onclick="window.app.toggleChat(true)"
-    class="fixed bottom-6 right-6 z-40 bg-gradient-to-tr from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white p-4 rounded-full shadow-2xl accent-glow flex items-center gap-2 transition-transform duration-300 active:scale-95 group"
+    class="fixed bottom-6 right-6 z-40 bg-slate-900 hover:bg-slate-800 text-slate-100 border border-slate-700/80 px-4 py-3 rounded-full shadow-2xl flex items-center gap-2.5 transition-all duration-200 active:scale-95 group"
   >
-    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-    </svg>
-    <span class="text-xs font-bold pr-1">Ask AI Stylist</span>
+    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+    <span class="text-xs font-semibold tracking-tight">Concierge</span>
   </button>
 
   <!-- ================= TECHNICAL ARCHITECTURE INSPECTOR DRAWER ================= -->
@@ -292,7 +290,7 @@
     <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-amber-400 font-bold">⚡</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
           <h3 class="text-xs font-bold text-slate-100 tracking-wide uppercase font-mono">Architecture Inspector</h3>
         </div>
         <p class="text-[10px] text-slate-400">Live Shopify Storefront GraphQL & Tool Traces</p>

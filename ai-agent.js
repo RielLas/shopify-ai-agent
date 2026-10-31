@@ -130,7 +130,7 @@ export class ShoppingAgent {
    * querying Shopify GraphQL, and returning rich UI cards.
    */
   async callHeuristicAgent(userMessage) {
-    this.notifyStatus('🧠 Parsing customer intent & styling preferences...');
+    this.notifyStatus('Parsing customer intent and preferences...');
     await new Promise(r => setTimeout(r, 400)); // natural UX beat
 
     const lower = userMessage.toLowerCase();
@@ -140,7 +140,7 @@ export class ShoppingAgent {
     
     // Check for specific item mentioned in cart request
     if (isCartIntent) {
-      this.notifyStatus('🔍 Resolving variant for Shopify cart session...');
+      this.notifyStatus('Resolving product variant for checkout session...');
       const allProducts = await shopifyClient.getProducts(12);
 
       let targetProduct = allProducts.find(p => lower.includes(p.title.toLowerCase()));
@@ -157,13 +157,13 @@ export class ShoppingAgent {
       }
 
       if (targetProduct && targetProduct.primaryVariantId) {
-        this.notifyStatus(`⚡ Executing cartCreate mutation on Shopify Storefront API...`);
+        this.notifyStatus('Executing cartCreate mutation on Storefront API...');
         const cartResult = await this.executeTool('create_cart_checkout', {
           variantId: targetProduct.primaryVariantId,
           quantity: 1
         });
 
-        const reply = `I've created an official Shopify cart session with the **${targetProduct.title}**! You can review your items below and proceed straight to secure Shopify checkout.`;
+        const reply = `Created an official Shopify checkout session for the **${targetProduct.title}**. You can review the details below and proceed to checkout:`;
         
         return {
           text: reply,
@@ -192,7 +192,7 @@ export class ShoppingAgent {
     else if (lower.includes('winter') || lower.includes('jacket') || lower.includes('coat')) searchQuery = 'sweatpant'; // related cozy item
     else if (lower.includes('black')) searchQuery = 'slide';
 
-    this.notifyStatus('⚡ Executing Storefront GraphQL search query...');
+    this.notifyStatus('Executing Storefront GraphQL search query...');
     const searchResult = await this.executeTool('search_products', {
       query: searchQuery,
       maxPrice: maxPrice,

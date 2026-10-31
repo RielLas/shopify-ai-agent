@@ -1,13 +1,13 @@
 /**
- * AURA Concierge — Live Shopify Theme Embed Widget
- * Self-contained, zero-dependency autonomous shopping assistant
+ * AURA Concierge — Minimalist Shopify Theme Embed Widget
+ * Clean, restrained, typography-first shopping assistant
  * Runs natively on any Shopify theme via /products.json & /cart/add.js
  */
 (function() {
   if (window.__AURA_CONCIERGE_LOADED__) return;
   window.__AURA_CONCIERGE_LOADED__ = true;
 
-  // 1. Inject Styles
+  // 1. Inject Minimalist Styles
   const style = document.createElement('style');
   style.id = 'aura-concierge-styles';
   style.textContent = `
@@ -16,48 +16,54 @@
       bottom: 24px;
       right: 24px;
       z-index: 999999;
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      color: #ffffff;
-      border: none;
+      background: #0f1117;
+      color: #f1f5f9;
+      border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 9999px;
-      padding: 14px 20px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4), 0 8px 10px -6px rgba(79, 70, 229, 0.2);
+      padding: 12px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 10px;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     #aura-fab:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 15px 30px -5px rgba(79, 70, 229, 0.5);
+      background: #181b24;
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: translateY(-1px);
+    }
+    #aura-fab .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 9999px;
+      background: #10b981;
     }
     #aura-drawer {
       position: fixed;
-      bottom: 90px;
+      bottom: 84px;
       right: 24px;
-      width: 380px;
+      width: 370px;
       max-width: calc(100vw - 48px);
-      height: 560px;
-      max-height: calc(100vh - 120px);
+      height: 540px;
+      max-height: calc(100vh - 110px);
       z-index: 999999;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      background: #0b0c10;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
       display: flex;
       flex-direction: column;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       overflow: hidden;
       opacity: 0;
-      transform: translateY(20px) scale(0.96);
+      transform: translateY(14px) scale(0.98);
       pointer-events: none;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     #aura-drawer.open {
       opacity: 1;
@@ -66,145 +72,193 @@
     }
     .aura-header {
       padding: 16px 20px;
-      background: rgba(30, 41, 59, 0.7);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: #0f1117;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .aura-header h3 {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 700;
-      color: #f8fafc;
+    .aura-header-info {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
-    .aura-badge {
+    .aura-header-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f8fafc;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    .aura-header-badge {
       font-size: 10px;
-      background: rgba(99, 102, 241, 0.2);
-      color: #818cf8;
-      padding: 2px 8px;
-      border-radius: 9999px;
-      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-weight: 500;
     }
     .aura-close-btn {
       background: transparent;
       border: none;
-      color: #94a3b8;
+      color: #64748b;
       cursor: pointer;
-      font-size: 18px;
       padding: 4px;
-      line-height: 1;
-      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: color 0.15s;
+    }
+    .aura-close-btn:hover {
+      color: #cbd5e1;
     }
     .aura-messages {
       flex: 1;
-      padding: 16px;
+      padding: 18px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
     .aura-msg {
-      max-width: 85%;
-      padding: 10px 14px;
+      max-width: 88%;
+      padding: 11px 15px;
       font-size: 13px;
-      line-height: 1.45;
-      border-radius: 16px;
+      line-height: 1.5;
+      border-radius: 14px;
+      letter-spacing: -0.005em;
     }
     .aura-msg-bot {
       align-self: flex-start;
-      background: rgba(30, 41, 59, 0.8);
-      color: #e2e8f0;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: #14171f;
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.05);
       border-bottom-left-radius: 4px;
     }
     .aura-msg-user {
       align-self: flex-end;
-      background: #4f46e5;
-      color: #ffffff;
+      background: #252b38;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-bottom-right-radius: 4px;
     }
     .aura-product-card {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(99, 102, 241, 0.3);
+      background: #101218;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
-      padding: 10px;
+      padding: 12px 14px;
       margin-top: 8px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
     .aura-product-card .title {
       font-weight: 600;
-      font-size: 12px;
-      color: #f8fafc;
+      font-size: 13px;
+      color: #f1f5f9;
+      letter-spacing: -0.01em;
     }
     .aura-product-card .price {
       font-size: 12px;
-      color: #34d399;
-      font-weight: 700;
+      color: #94a3b8;
+      font-variant-numeric: tabular-nums;
     }
-    .aura-product-card button {
-      background: #4f46e5;
-      color: white;
-      border: none;
+    .aura-product-card .action-btn {
+      background: #1e2330;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 11px;
-      font-weight: 600;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 500;
       cursor: pointer;
-      transition: background 0.15s;
+      text-align: center;
+      transition: all 0.15s;
     }
-    .aura-product-card button:hover {
-      background: #4338ca;
+    .aura-product-card .action-btn:hover {
+      background: #2b3244;
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+    .aura-starters {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
     }
     .aura-starter-btn {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #cbd5e1;
-      padding: 6px 12px;
-      font-size: 11px;
-      border-radius: 9999px;
+      background: #12151d;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      padding: 8px 12px;
+      font-size: 12px;
+      border-radius: 8px;
       cursor: pointer;
       text-align: left;
       transition: all 0.15s;
+      font-weight: 400;
     }
     .aura-starter-btn:hover {
-      background: rgba(79, 70, 229, 0.2);
-      border-color: #6366f1;
-      color: #ffffff;
+      background: #181d27;
+      color: #f1f5f9;
+      border-color: rgba(255, 255, 255, 0.12);
     }
     .aura-input-box {
       padding: 12px 16px;
-      background: rgba(15, 23, 42, 0.95);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: #0f1117;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
       display: flex;
       gap: 8px;
     }
     .aura-input-box input {
       flex: 1;
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
+      background: #141720;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
       padding: 10px 14px;
       color: #f8fafc;
       font-size: 13px;
       outline: none;
+      transition: border-color 0.15s;
+    }
+    .aura-input-box input::placeholder {
+      color: #64748b;
     }
     .aura-input-box input:focus {
-      border-color: #6366f1;
+      border-color: rgba(255, 255, 255, 0.22);
     }
     .aura-send-btn {
-      background: #4f46e5;
-      color: white;
+      background: #f1f5f9;
+      color: #0b0c10;
       border: none;
-      border-radius: 12px;
-      padding: 0 16px;
+      border-radius: 10px;
+      padding: 0 14px;
       cursor: pointer;
+      font-size: 13px;
       font-weight: 600;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .aura-send-btn:hover {
+      background: #ffffff;
+    }
+    .aura-checkout-link {
+      display: inline-block;
+      margin-top: 10px;
+      background: #f8fafc;
+      color: #090a0f;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: opacity 0.15s;
+    }
+    .aura-checkout-link:hover {
+      opacity: 0.9;
     }
   `;
   document.head.appendChild(style);
@@ -213,49 +267,57 @@
   let catalog = [];
   fetch('/products.json')
     .then(r => r.json())
-    .then(data => {
-      catalog = data.products || [];
-      console.log('[AURA AI] Loaded products:', catalog.length);
-    })
-    .catch(err => console.warn('[AURA AI] Catalog fetch error:', err));
+    .then(data => { catalog = data.products || []; })
+    .catch(() => {});
 
-  // 3. Render Widget DOM
+  // 3. Render Minimalist Widget
   const fab = document.createElement('button');
   fab.id = 'aura-fab';
   fab.innerHTML = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10a9.96 9.96 0 0 1-5.008-1.341L2 22l1.341-4.992A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2z"/></svg>
-    <span>Ask AI Stylist</span>
+    <span class="status-dot"></span>
+    <span>Concierge</span>
   `;
 
   const drawer = document.createElement('div');
   drawer.id = 'aura-drawer';
   drawer.innerHTML = `
     <div class="aura-header">
-      <div>
-        <h3>⚡ Aura Stylist <span class="aura-badge">Shopify Agent</span></h3>
+      <div class="aura-header-info">
+        <h3 class="aura-header-title">Concierge</h3>
+        <span class="aura-header-badge">Assistant</span>
       </div>
-      <button class="aura-close-btn" id="aura-close-btn">✕</button>
+      <button class="aura-close-btn" id="aura-close-btn" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
     </div>
     <div class="aura-messages" id="aura-msg-container">
       <div class="aura-msg aura-msg-bot">
-        Hey! I'm your autonomous AI shopping assistant on <b>${window.Shopify?.shop || 'this store'}</b>. Ask me for recommendations, budget picks, or instant checkout.
+        Welcome. I can help you explore the catalog, filter by price, and assemble your order directly.
       </div>
-      <div style="display:flex; flex-direction:column; gap:6px;" id="aura-starters">
-        <button class="aura-starter-btn" data-q="Show me items under Rs. 2000">💰 Pieces under Rs. 2,000</button>
-        <button class="aura-starter-btn" data-q="Recommend sneakers">👟 Recommend footwear & sneakers</button>
-        <button class="aura-starter-btn" data-q="Add Classic Hoodie to cart">🛒 Add Hoodie to my cart</button>
+      <div class="aura-starters" id="aura-starters">
+        <button class="aura-starter-btn" data-q="Show pieces under Rs. 2000">Pieces under Rs. 2,000</button>
+        <button class="aura-starter-btn" data-q="Recommend footwear">Footwear and sneakers</button>
+        <button class="aura-starter-btn" data-q="Add Classic Streetwear Hoodie to cart">Classic Streetwear Hoodie</button>
       </div>
     </div>
     <div class="aura-input-box">
-      <input type="text" id="aura-user-input" placeholder="Ask about style, budget, or cart..." />
-      <button class="aura-send-btn" id="aura-send-btn">→</button>
+      <input type="text" id="aura-user-input" placeholder="Ask about style, budget, or items..." />
+      <button class="aura-send-btn" id="aura-send-btn" aria-label="Send">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
     </div>
   `;
 
   document.body.appendChild(fab);
   document.body.appendChild(drawer);
 
-  // 4. Widget Logic
+  // 4. Interactivity
   fab.onclick = () => drawer.classList.toggle('open');
   document.getElementById('aura-close-btn').onclick = () => drawer.classList.remove('open');
 
@@ -272,7 +334,7 @@
   }
 
   window.auraAddToCart = async function(variantId, title) {
-    appendMsg(`Adding <b>${title}</b> to your Shopify cart...`);
+    appendMsg(`Adding <b>${title}</b> to cart...`);
     try {
       const res = await fetch('/cart/add.js', {
         method: 'POST',
@@ -280,9 +342,9 @@
         body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
       });
       const data = await res.json();
-      appendMsg(`✅ <b>${title}</b> added to cart! <br/><a href="/checkout" style="display:inline-block; margin-top:8px; background:#10b981; color:#fff; text-decoration:none; padding:6px 14px; border-radius:8px; font-weight:700;">Proceed to Checkout →</a>`);
+      appendMsg(`<b>${title}</b> added to your cart.<br/><a href="/checkout" class="aura-checkout-link">Proceed to Checkout →</a>`);
     } catch (e) {
-      appendMsg(`Error adding to cart: ${e.message}`);
+      appendMsg(`Unable to add item: ${e.message}`);
     }
   };
 
@@ -294,7 +356,7 @@
 
     const lower = q.toLowerCase();
 
-    // Check for add to cart
+    // Check for direct add to cart
     if (lower.includes('add') || lower.includes('cart') || lower.includes('buy')) {
       const matched = catalog.find(p => lower.includes(p.title.toLowerCase()) || lower.includes(p.handle.replace(/-/g, ' ')));
       if (matched && matched.variants && matched.variants[0]) {
@@ -311,7 +373,6 @@
       budget = parseInt(budgetMatch[0].replace(/[^\d]/g, ''), 10);
     }
 
-    // Filter products
     let results = catalog;
     if (budget) {
       results = results.filter(p => {
@@ -320,7 +381,7 @@
       });
     }
 
-    if (lower.includes('sneaker') || lower.includes('shoe')) {
+    if (lower.includes('sneaker') || lower.includes('shoe') || lower.includes('footwear')) {
       results = results.filter(p => p.title.toLowerCase().includes('sneaker') || p.title.toLowerCase().includes('runner'));
     } else if (lower.includes('hoodie')) {
       results = results.filter(p => p.title.toLowerCase().includes('hoodie'));
@@ -332,9 +393,9 @@
 
     if (results.length === 0) {
       results = catalog.slice(0, 3);
-      appendMsg(`I didn't find an exact match, but here are our top trending pieces right now:`);
+      appendMsg(`No direct match found. Here are current featured selections:`);
     } else {
-      appendMsg(`Here are the matching pieces from our live catalog:`);
+      appendMsg(`Matching pieces from catalog:`);
     }
 
     results.forEach(p => {
@@ -344,7 +405,7 @@
       card.innerHTML = `
         <div class="title">${p.title}</div>
         <div class="price">Rs. ${parseFloat(v.price).toLocaleString()}</div>
-        <button onclick="window.auraAddToCart(${v.id}, '${p.title.replace(/'/g, "\\'")}')">⚡ Quick Add to Cart</button>
+        <button class="action-btn" onclick="window.auraAddToCart(${v.id}, '${p.title.replace(/'/g, "\\'")}')">Add to Cart</button>
       `;
       msgContainer.appendChild(card);
     });
@@ -365,6 +426,4 @@
   document.querySelectorAll('.aura-starter-btn').forEach(btn => {
     btn.onclick = () => handleUserQuery(btn.getAttribute('data-q'));
   });
-
-  console.log('[AURA Concierge] Live AI Agent initialized on store.');
 })();

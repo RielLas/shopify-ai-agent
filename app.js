@@ -338,17 +338,17 @@ class App {
     let cartHtml = '';
     if (agentResponse.cart) {
       cartHtml = `
-        <div class="mt-3 w-full p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-200 text-xs">
+        <div class="mt-3 w-full p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-200 text-xs">
           <div class="flex items-center justify-between mb-2">
-            <span class="font-bold">🛒 Live Shopify Cart Created</span>
-            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-900/60 px-2 py-0.5 rounded">Storefront Session</span>
+            <span class="font-semibold text-emerald-300">Live Shopify Checkout Session</span>
+            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-900/60 px-2 py-0.5 rounded">Storefront API</span>
           </div>
           <a 
             href="${agentResponse.cart.checkoutUrl}" 
             target="_blank" 
-            class="w-full block text-center bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-lg text-xs transition-colors shadow-md shadow-emerald-600/30"
+            class="w-full block text-center bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 rounded-lg text-xs transition-colors"
           >
-            Direct Shopify Checkout &rarr;
+            Proceed to Checkout &rarr;
           </a>
         </div>
       `;

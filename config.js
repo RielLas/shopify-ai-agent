@@ -33,19 +33,19 @@ Always be concise, stylish, polite, and recommend specific items with reasons.`
   },
   starterPrompts: [
     {
-      label: "👟 Black sneakers under $50",
-      prompt: "Show me black sneakers or slides under $50 with sizes"
+      label: "Footwear under $50",
+      prompt: "Show me footwear or slides under $50 with sizes"
     },
     {
-      label: "🧥 Winter outerwear & tops",
+      label: "Outerwear and layers",
       prompt: "What winter tops or jackets do you have in stock?"
     },
     {
-      label: "🔥 Top trending styles",
+      label: "Trending arrivals",
       prompt: "What are your top recommended apparel picks right now?"
     },
     {
-      label: "🛒 Add Slides & checkout",
+      label: "Add Slides to cart",
       prompt: "Add comfortable slides to my cart and give me the checkout link"
     }
   ]
