@@ -76,7 +76,7 @@ Unlike conventional chatbots that rely on static FAQ retrieval or brittle iframe
 #### Tier 2: Dual-Engine Tool Calling & Reasoning
 - **Engine A: Intelligent Heuristic Agent (Zero API Key Mode):**  
   An ultra-fast client-side intent classifier that parses pricing thresholds (e.g., *"under $50"*, *"below 30"*), product categories (*"slides"*, *"tees"*, *"hoodies"*), and purchasing verbs (*"checkout"*, *"buy"*, *"cart"*). Executes valid Shopify tools with zero server cost or external API keys.
-- **Engine B: LLM Tool Calling (OpenAI / Gemini 1.5):**  
+- **Engine B: LLM Tool Calling (Gemini / OpenAI):**  
   Implements standard Function Calling schemas (`tools` parameter) where the LLM produces structured JSON tool arguments executed against the Storefront API.
 
 #### Tier 3: Shopify Storefront GraphQL & Checkout Hand-off

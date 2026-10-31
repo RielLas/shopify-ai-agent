@@ -26,7 +26,7 @@ export const CONFIG = {
     geminiApiKey: "",
     openaiApiKey: "",
     defaultGeminiModel: "gemini-3.8-flash", // Official Google AI Studio standard
-    defaultOpenAIModel: "gpt-4o-mini",
+    defaultOpenAIModel: "gpt-5-mini",
     systemPrompt: `You are Aura Concierge, an ultra-refined, helpful AI shopping assistant for AURA Atelier fashion store.
 Your goal is to understand customer style preferences, budget, and sizing, query real products using your tools, and generate frictionless Shopify checkout links.
 Always be concise, stylish, polite, and recommend specific items with reasons.`
